@@ -14,16 +14,15 @@ public class GUI {
   static JPanel jp;
 
   public static void main(String[] args) {
-    // TODO Auto-generated method stub
-    System.out.println("We are here");
     Game game = new Game();
-  
+    JOptionPane.showMessageDialog(jf, "Start?");
     game.init();
+    
     int rowNum = game.board.getDimRow();
     int colNum = game.board.getDimCol();
 
     jf = new JFrame("PIRAT HUNTS");
-    jf.setSize(500, 500);
+    jf.setSize(650, 650);
     jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     
     jp = new JPanel();
@@ -57,14 +56,16 @@ public class GUI {
         jp.add(jb[i][j]);
       }
     }
+    
     jf.add(jp);
     jf.setResizable(false);
     jf.setVisible(true);
 
+    
     KeyListener kl = new KeyListener() {
       @Override
       public void keyPressed(KeyEvent e) {
-        // TODO Auto-generated method stub
+     
         if (e.getKeyCode() == 49 || e.getKeyCode() == 97 || e.getKeyCode() == 89) {
           game.ship.changeDirection(game.ship.LEFT_DOWN);
           System.out.println("IDEMO GORE-LIJEVO");
@@ -102,12 +103,13 @@ public class GUI {
           System.out.println("IDEMO LIJEVO");
         }
         game.moveShip();
+     
         try {
           Thread.sleep(100);
         } catch (InterruptedException e1) {
-          // TODO Auto-generated catch block
           e1.printStackTrace();
         }
+        
         game.movePirates();
         game.board.toConsole();
       }
@@ -116,6 +118,7 @@ public class GUI {
         // TODO Auto-generated method stub
 
       }
+      
       @Override
       public void keyTyped(KeyEvent e) {
         // TODO Auto-generated method stub
@@ -124,21 +127,24 @@ public class GUI {
 
     jf.addKeyListener(kl);
 
-    while (game.getLevel() < 10) {
+    while (game.getLevel() < 4) {
       if (game.end()) {
           game.restart();
-          JOptionPane.showMessageDialog(jf,"Play again.");
+          JOptionPane.showMessageDialog(jf,"Game over!"
+          		+ " Play again.");
           game.setGameOver(false);
           game.init();
         //JOptionPane.showMessageDialog(null, "Game over...");
         //jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
 
       }
+      
       if(game.nextLevel()){
         System.out.println("New one");
         game.moveToNextLevel();
         game.init();
       }
+      
       for (int i=0; i<rowNum; i++) {
         for (int j=0; j<colNum; j++) {
           int v = game.board.board[i][j];

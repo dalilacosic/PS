@@ -2,6 +2,8 @@ public class Ship {
   private int row;
   private int col;
   private int direction;
+  
+  //smjer kretanja odredje brojevima
   static final int LEFT_DOWN = 1;
   static final int DOWN = 2;
   static final int RIGHT_DOWN = 3;
@@ -11,7 +13,7 @@ public class Ship {
   static final int UP = 8;
   static final int RIGHT_UP = 9;
   
-
+//konstruktor
   Ship(int row, int col) {
     this.row = row;
     this.col = col;
@@ -42,6 +44,7 @@ public class Ship {
     this.direction = direction;
   }
 
+  //pomjeri se na osnovu zadanog smjera
   void move() {
     if (this.direction == this.LEFT_UP) {
       this.row--;
@@ -73,6 +76,7 @@ public class Ship {
     }
   }
 
+  //promjena smjera
   void changeDirection(int dir) {
     this.direction = dir;
   }

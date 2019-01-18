@@ -1,7 +1,7 @@
 import java.util.Random;
 public class Game {
   private int numOfPirates = 1;
-  private int numOfIslands = 5;
+  private int numOfIslands = 2;
   private int level = 1;
   private boolean gameOver = false;
   Ship ship;
@@ -16,46 +16,51 @@ public class Game {
 
   public void init() {
     board = new Board();
-    //player on fixed position bottom left corner
+    
+    //postavimo igraca u dole lijevo
     ship = new Ship(17, 2);
+    
+    //postavimo random pirate
     int randomRow;
     int randomCol;
     Random randomPiratePosition = new Random();
-    System.out.println("Num of pirates: "+this.numOfPirates);
-    System.out.println("Num of islands: "+this.numOfIslands);
+    
+    System.out.println("Broj pirata: "+this.numOfPirates);
+    System.out.println("Broj otoka: "+this.numOfIslands);
+   
     board.setShip(ship.getRow(), ship.getCol());
     int i = 0;
     pirates = new Pirate[this.numOfPirates];
     while( i < this.numOfPirates){
-      //Random pirate position row and to be atleast 5 places away from player
+      //postavljamo radnom pirate, ali da budu bar 5 mjesta udaljeni od igraca
       randomRow = randomPiratePosition.nextInt(12);
-      //Random pirate position col and to be atleast 5 places away from player
       randomCol = randomPiratePosition.nextInt(15)+5;
+      
       if(board.checkInitPirates(randomRow, randomCol)) {
-        //TODO: remove this "console.log"
-        System.out.println("ROw: "+ randomRow +" Col: "+ randomCol);
-        pirates[i] = new Pirate(randomRow, randomCol, Pirate.UP);    // TODO Postavi duhove na OK pozicije
+        pirates[i] = new Pirate(randomRow, randomCol, Pirate.UP);  
         board.setPirate(randomRow, randomCol);
         i++;
       }
     }
+    
+    //na slican nacin postavljamo otoke
     i=0;
     while( i < this.numOfIslands){
-      //Random island position row and to be atleast 5 places away from player
+      //postavljamo random otoke, ali da budu bar 5 mjesta udaljeni od igraca
       randomRow = randomPiratePosition.nextInt(12);
-      //Random island position col and to be atleast 5 places away from player
       randomCol = randomPiratePosition.nextInt(15)+5;
+      
       if(board.checkInitPirates(randomRow, randomCol)) {
-        //TODO: remove this "console.log"
-        System.out.println("ROw: "+ randomRow +" Col: "+ randomCol);
         board.setIsland(randomRow, randomCol);
         i++;
       }
     }
-    System.out.println("Initializing game");
+    System.out.println("Game: ");
     board.toConsole();
 
   }
+  
+  //pomjeranje brodova
   public void moveShipMRandom() {
     int dir = (int) (Math.random() * 4 + 1);
     this.ship.setDirection(dir);
@@ -68,6 +73,7 @@ public class Game {
     if (checkMove(ship.getRow(), ship.getCol(), direction)) {
       board.removeShip(ship.getRow(), ship.getCol());
       ship.move();
+      
       if (board.setShip(ship.getRow(), ship.getCol()) == true) {
         this.gameOver = true;
       }
@@ -75,6 +81,7 @@ public class Game {
     }
   }
 
+  //pomjeranje neprijatelja
   public void movePirates() {
 
     AI();
@@ -96,6 +103,7 @@ public class Game {
     }
   }
 
+  //ispravnost poteza
   boolean checkMove(int row, int col, int dir) {
     int dimRow = board.getDimRow();
     int dimCol = board.getDimCol();
@@ -139,21 +147,26 @@ public class Game {
     return true;
   }
 
+  //da li je kraj igre
   boolean end() {
       if (this.gameOver == true)
         return true;
     return false;
   }
+  
+  //provjerava da li je igrac uspio stici do cilja, ako jeste ide na sljedeci level
   boolean nextLevel() {
-    //if player manages to get to portal, put him on next level
     return this.ship.getRow() == 0 && this.ship.getCol() == this.board.getDimCol() - 1;
   }
+  
+  
   void restart(){
     this.level = 1;
     this.numOfIslands = 1;
     this.numOfPirates = 1;
-
   }
+  
+  
   void moveToNextLevel(){
     this.level++;
     this.numOfIslands++;
